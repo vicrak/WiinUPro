@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,7 +31,7 @@ namespace WiinUPro
         private static MainWindow _instance;
 
         public bool WindowHidden { get; private set; } = false;
-        
+
         List<DeviceStatus> _availableDevices;
         DateTime _lastRefreshTime;
 
@@ -44,7 +44,7 @@ namespace WiinUPro
             WinBtStream.OverrideSharingMode = true;
             WinBtStream.OverridenFileShare = System.IO.FileShare.ReadWrite;
         }
-        
+
         public void Refresh()
         {
             // Prevent this method from being spammed
@@ -185,7 +185,7 @@ namespace WiinUPro
                     }
                 }
             }
-            
+
         }
 
         private void Device_RawInput(object sender, SharpDX.RawInput.RawInputEventArgs e)
@@ -253,8 +253,8 @@ namespace WiinUPro
             {
                 // Display message
                 MessageBox.Show(
-                    Globalization.Translate("Error_Connection"), 
-                    Globalization.Translate("Error_Failed"), 
+                    Globalization.Translate("Error_Connection"),
+                    Globalization.Translate("Error_Failed"),
                     MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
@@ -355,7 +355,7 @@ namespace WiinUPro
         {
             //WinBtStream.OverrideSharingMode = settingExclusiveMode.IsChecked ?? false;
             WinBtStream.OverrideSharingMode = true;
-            
+
             if (settingExclusiveMode.IsChecked ?? false)
             {
                 WinBtStream.OverridenFileShare = System.IO.FileShare.None;
@@ -416,6 +416,44 @@ namespace WiinUPro
         private void settingProfileQueuing_Checked(object sender, RoutedEventArgs e)
         {
             AppPrefs.Instance.profileQueuing = settingProfileQueuing.IsChecked ?? false;
+        }
+
+        private void btnCheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            btnCheckUpdates.IsEnabled = false;
+            string currentVersion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
+
+            UpdateChecker.CheckForUpdates("WiinUPro", currentVersion, (success, updateAvailable, info) =>
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    btnCheckUpdates.IsEnabled = true;
+                    if (success)
+                    {
+                        if (updateAvailable)
+                        {
+                            var res = MessageBox.Show(
+                                string.Format("A new version ({0}) is available.\nWould you like to go to the download page?", info.Version),
+                                "Update Available",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Information);
+
+                            if (res == MessageBoxResult.Yes)
+                            {
+                                System.Diagnostics.Process.Start(info.Url);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("You are up to date.", "No Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to check for updates.", "Check Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }));
+            });
         }
 
         #endregion
@@ -594,7 +632,7 @@ namespace WiinUPro
         {
             Globalization.ApplyTranslations(this);
 
-            foreach (string language in Globalization.GetAvailableLanguages()) 
+            foreach (string language in Globalization.GetAvailableLanguages())
             {
                 var languageBox = new ComboBoxItem
                 {

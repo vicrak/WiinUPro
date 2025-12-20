@@ -20,5 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\WinBtConnector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\WinBtStream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\WinUsbStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateChecker.cs" />
   </ItemGroup>
 </Project>

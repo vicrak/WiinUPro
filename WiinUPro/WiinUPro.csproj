@@ -79,6 +79,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="vJoyInterfaceWrap">
       <HintPath>..\vJoy\x64\vJoyInterfaceWrap.dll</HintPath>
     </Reference>

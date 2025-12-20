@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "WiinUPro",
+      "version": "1.0.0",
+      "url": "https://github.com/KeyPuncher/WiinUPro/releases"
+    },
+    {
+      "name": "WiinUSoft",
+      "version": "1.0.0",
+      "url": "https://github.com/KeyPuncher/WiinUPro/releases"
+    }
+  ],
+  "messages": []
+}

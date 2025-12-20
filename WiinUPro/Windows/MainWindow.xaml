@@ -82,6 +82,7 @@
                             <CheckBox x:Name="settingProfileQueuing" Content="Profile Queuing" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingProfileQueuing_Checked" IsEnabled="False" Uid="Settings_ProfileQ"
                                       ToolTip="Profiles whose names end with &quot;_x[number]&quot; (for example &quot;Nunchuk_Xinput_IR_x1.wup&quot;) will be automatically switched between depending on the currently connected devices.&#x0a;The number should correspond with the selected rumble controller of the profile. This functionality is only available for Nintendo controllers."/>
                             <ComboBox x:Name="settingLanguage" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Width="165" SelectionChanged="settingLanguage_SelectionChanged"/>
+                            <Button x:Name="btnCheckUpdates" Content="Check for Updates" HorizontalAlignment="Left" Margin="10,200,0,0" VerticalAlignment="Top" Width="165" Click="btnCheckUpdates_Click"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,0,4,7.5" Style="{StaticResource GroupBoxStyle}" Height="159" VerticalAlignment="Bottom" Uid="XInput_Group">

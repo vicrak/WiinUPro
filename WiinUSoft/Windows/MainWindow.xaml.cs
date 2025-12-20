@@ -1,4 +1,4 @@
-﻿using Hardcodet.Wpf.TaskbarNotification;
+using Hardcodet.Wpf.TaskbarNotification;
 using NintrollerLib;
 using System;
 using System.Collections.Generic;
@@ -84,7 +84,7 @@ namespace WiinUSoft
             System.Diagnostics.Debug.WriteLine("Refreshing");
             hidList = WinBtStream.GetPaths();
             List<KeyValuePair<int, DeviceControl>> connectSeq = new List<KeyValuePair<int, DeviceControl>>();
-            
+
             foreach (var hid in hidList)
             {
                 DeviceControl existingDevice = null;
@@ -112,8 +112,8 @@ namespace WiinUSoft
                 else
                 {
                     var stream = new WinBtStream(
-                        hid.DevicePath, 
-                        UserPrefs.Instance.toshibaMode ? WinBtStream.BtStack.Toshiba : WinBtStream.BtStack.Microsoft, 
+                        hid.DevicePath,
+                        UserPrefs.Instance.toshibaMode ? WinBtStream.BtStack.Toshiba : WinBtStream.BtStack.Microsoft,
                         UserPrefs.Instance.greedyMode ? FileShare.None : FileShare.ReadWrite);
                     Nintroller n = new Nintroller(stream, hid.Type);
 
@@ -172,7 +172,7 @@ namespace WiinUSoft
                     i = 0;
                 }
             }
-            
+
             foreach(KeyValuePair<int, DeviceControl> d in connectSeq)
             {
                 if (Holders.XInputHolder.availabe[target] && target < 4)
@@ -234,7 +234,7 @@ namespace WiinUSoft
                 menu_StartMinimized.IsChecked = true;
                 WindowState = WindowState.Minimized;
             }
-            
+
             menu_AutoStart.IsChecked = UserPrefs.Instance.autoStartup;
             menu_NoSharing.IsChecked = UserPrefs.Instance.greedyMode;
             menu_AutoRefresh.IsChecked = UserPrefs.Instance.autoRefresh;
@@ -285,7 +285,7 @@ namespace WiinUSoft
                 //    groupXinput.Children.Add(sender);
                 //    break;
             }
-            
+
             if (menu_AutoRefresh.IsChecked)
             {
                 AutoRefresh(true, groupAvailable.Children.Count + groupXinput.Children.Count);
@@ -307,7 +307,7 @@ namespace WiinUSoft
 
             AutoRefresh(menu_AutoRefresh.IsChecked, deviceList.Count);
         }
-        
+
         private void btnDetatchAllXInput_Click(object sender, RoutedEventArgs e)
         {
             List<DeviceControl> detatchList = new List<DeviceControl>();
@@ -400,6 +400,44 @@ namespace WiinUSoft
         {
             var dWin = new Windows.CalDefaultWindow();
             dWin.ShowDialog();
+        }
+
+        private void menu_CheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            menu_CheckUpdates.IsEnabled = false;
+            string currentVersion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
+
+            UpdateChecker.CheckForUpdates("WiinUSoft", currentVersion, (success, updateAvailable, info) =>
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    menu_CheckUpdates.IsEnabled = true;
+                    if (success)
+                    {
+                        if (updateAvailable)
+                        {
+                            var res = MessageBox.Show(
+                                string.Format("A new version ({0}) is available.\nWould you like to go to the download page?", info.Version),
+                                "Update Available",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Information);
+
+                            if (res == MessageBoxResult.Yes)
+                            {
+                                System.Diagnostics.Process.Start(info.Url);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("You are up to date.", "No Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to check for updates.", "Check Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }));
+            });
         }
 
         private void menu_MsBluetooth_Click(object sender, RoutedEventArgs e)
